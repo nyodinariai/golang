@@ -5,17 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gorilla/mux"
 )
 
 func main(){
 
-	os.Setenv("DB_NAME", "golang")
-	os.Setenv("DB_USER", "root")
-	os.Setenv("DB_PASSWORD", "515253")
-	os.Setenv("DB_HOST", "localhost")
+	
 
 	router := mux.NewRouter()
 	router.HandleFunc("/usuarios", servidor.CriarUsuario).Methods(http.MethodPost)
