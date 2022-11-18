@@ -3,7 +3,6 @@ package main
 import (
 	"api/src/banco"
 	"api/src/config"
-	"api/src/handlers"
 	"api/src/router"
 	"fmt"
 	"log"
@@ -12,8 +11,8 @@ import (
 
 func main(){
 	config.Carregar()
-	DB := banco.Conectar()
-	h := handlers.New(DB)
+	banco.Conectar()
+
 	
 	r := router.Gerar()
 

@@ -30,10 +30,11 @@ func Carregar(){
 		Porta = 9000
 	}
 
-	StringConexaoBanco = fmt.Sprintf("%s:%s@tcp(%/)/%s?charset=utf8&parseTime=True&Local",
+	StringConexaoBanco = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&Local",
 		os.Getenv("DB_USUARIO"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_HOST"),
+		os.Getenv("DB_PORT"),
 		os.Getenv("DB_NAME"),
 	)	
 }
