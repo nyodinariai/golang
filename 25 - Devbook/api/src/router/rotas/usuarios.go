@@ -5,29 +5,11 @@ import (
 	"net/http"
 )
 
-type UsuarioRoutes interface{
-	AddUser (http.ResponseWriter, *http.Request)
-}
-
-
-type usuarioRoute struct{
-	usuarioController controllers.UsuarioController
-}
-
-func NovoUsuarioRouter (c controllers.UsuarioController) UsuarioRoutes{
-	return usuarioRoute{
-		usuarioController: c,
-	}
-}
-
-func (u usuarioRoute) AddUser(w http.ResponseWriter, r *http.Request){
-
-}
 var rotasUsuarios = []Rota{
 	{
 		Uri: "/usuarios",
 		Metodo: http.MethodPost,
-		Funcao: AddUser(),
+		Funcao: controllers.CriarUsuario,
 		RequerAutenticacao: false,
 	},
 	{

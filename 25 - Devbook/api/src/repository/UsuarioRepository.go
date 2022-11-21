@@ -8,28 +8,21 @@ import (
 )
 
 type usuarioRepository struct{
-	DB *gorm.DB
-}
-
-type UsuarioRepository interface{
-	Save(models.Usuario) (models.Usuario, error)
+	db *gorm.DB
 }
 
 //Cria um repositorio de usuarios
 func NovoRepositorioDeUsuarios(db *gorm.DB) *usuarioRepository{
-	return &usuarioRepository{
-		DB: db,
+	return &usuarioRepository{db}
+}
+
+func (repositorio usuarioRepository) Criar(usuario models.Usuario) (uint, error){
+	
+	statement := repositorio.db.Create(&usuario)
+	if err := statement.Error; err != nil{
+		log.Fatal((err))
 	}
-}
 
-func (u usuarioRepository) Migrate() error{
-	log.Print("[UsuarioRepository]...Migrate")
-	return u.DB.AutoMigrate(&models.Usuario{})
+	return uint(usuario.ID), nil
+	
 }
-
-func (u usuarioRepository) Save(usuario models.Usuario) (models.Usuario, error){
-	log.Print("[UsuarioRepository]...Save")
-	err := u.DB.Create(&usuario).Error
-	return usuario, err
-}
-
