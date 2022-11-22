@@ -8,6 +8,10 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strconv"
+	"strings"
+
+	"github.com/gorilla/mux"
 )
 
 //Criar usuario insere um usuario no banco de dados
@@ -47,12 +51,46 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request){
 
 //BuscarUsuarios busca todos os usuarios salvos no banco
 func BuscarUsuarios(w http.ResponseWriter, r *http.Request){
-	w.Write([]byte("Buscar Usuarios"))
+	nomeOuNick := strings.ToLower(r.URL.Query().Get("usuario"))
+		db, erro := banco.Conectar()
+	if erro != nil {
+		responses.Erro(w, http.StatusInternalServerError, erro)
+		return 
+	}
+
+	repositorio := repository.NovoRepositorioDeUsuarios(db)
+	usuarios, erro := repositorio.Buscar(nomeOuNick)
+		if erro != nil {
+		responses.Erro(w, http.StatusInternalServerError, erro)
+		return 
+	}
+
+	responses.JSON(w, http.StatusOK, usuarios)
 }
 
 //Busca um usuario no banco
 func BuscarUsuario(w http.ResponseWriter, r *http.Request){
-	w.Write([]byte("Buscar um Usuario"))
+	parametros := mux.Vars(r)
+
+	usuarioID, erro := strconv.ParseUint(parametros["usuarioId"], 10, 64)
+	if erro != nil{
+		responses.Erro(w, http.StatusBadRequest, erro)
+		return
+	}
+		db, erro := banco.Conectar()
+	if erro != nil {
+		responses.Erro(w, http.StatusInternalServerError, erro)
+		return 
+	}
+
+	repositorio := repository.NovoRepositorioDeUsuarios(db)
+	usuario, erro := repositorio.BuscarPorID(uint(usuarioID))
+		if erro != nil {
+		responses.Erro(w, http.StatusInternalServerError, erro)
+		return 
+	}
+	responses.JSON(w, http.StatusOK, usuario)
+
 }
 
 // Atualiza um usuario no banco

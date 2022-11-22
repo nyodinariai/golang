@@ -10,10 +10,10 @@ import (
 // Usuario representa um usuário utilizando a rede social
 type Usuario struct{
 	gorm.Model
-	Nome string 
-	Nick string 
-	Email string 
-	Senha string 
+	Nome string `json:"nome"`
+	Nick string `json:"nick"`
+	Email string `gorm:"type:varchar(255); unique_index" json:"email"`
+	Senha string `json:"senha,omitempty"`
 }
 
 // Preparar vai chamar os métodos para validar e formatar o usuário recebido
