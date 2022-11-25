@@ -42,6 +42,10 @@ func (usuario *Usuario) validar(etapa string) error {
 		return errors.New("o e-mail é obrigatório e não pode estar em branco")
 	}
 
+	if etapa == "cadastro" && usuario.Senha == "" {
+		return errors.New("o e-mail é obrigatório e não pode estar em branco")
+	}
+
 	return nil
 }
 
