@@ -52,3 +52,13 @@ func (repositorio Usuarios) Buscar(nomeOuNick string)([]models.Usuario, error){
 
 	return usuarios, nil
 	}
+
+func (repositorio Usuarios) AtualizarUsuario(usuarioID uint, usuario models.Usuario)(models.Usuario, error){
+	statement := repositorio.db.Model(&usuario).Where("ID = ?", usuarioID).Updates(models.Usuario{Nome: usuario.Nome, Nick: usuario.Nick, Email: usuario.Email})
+	if erro := statement.Error; erro != nil{
+		log.Fatal((erro))
+	}
+
+	return usuario, nil
+	
+}
