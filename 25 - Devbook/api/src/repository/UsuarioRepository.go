@@ -3,7 +3,6 @@ package repository
 import (
 	"api/src/models"
 	"fmt"
-	"log"
 
 	"gorm.io/gorm"
 )
@@ -21,8 +20,8 @@ func NovoRepositorioDeUsuarios(db *gorm.DB) *Usuarios{
 func (repositorio Usuarios) Criar(usuario models.Usuario) (uint, error){
 	
 	statement := repositorio.db.Create(&usuario)
-	if err := statement.Error; err != nil{
-		log.Fatal((err))
+	if erro := statement.Error; erro != nil{
+		return 0, erro
 	}
 
 	return uint(usuario.ID), nil
@@ -35,7 +34,7 @@ func (repositorio Usuarios) Buscar(nomeOuNick string)([]models.Usuario, error){
 	var usuarios []models.Usuario
 	statement := repositorio.db.Select("ID, nome, nick, email").Where("nome like ?", nomeOuNick).Or("nick like ?", nomeOuNick).Find(&usuarios)
 	if erro := statement.Error; erro != nil{
-		log.Fatal((erro))
+		return nil, erro
 	}
 
 	return usuarios, nil
@@ -43,22 +42,31 @@ func (repositorio Usuarios) Buscar(nomeOuNick string)([]models.Usuario, error){
 	}
 
 	func (repositorio Usuarios) BuscarPorID(id uint)(models.Usuario, error){
-		var usuarios = models.Usuario{}
-		statement := repositorio.db.Select("ID, nome, nick, email").First(&usuarios, id)
-
+		var usuario = models.Usuario{}
+		statement := repositorio.db.Select("ID, nome, nick, email").First(&usuario, id)
 		if erro := statement.Error; erro != nil{
-		log.Fatal((erro))
-	}
+			return usuario, erro			
+		}
 
-	return usuarios, nil
+	return usuario, nil
 	}
 
 func (repositorio Usuarios) AtualizarUsuario(usuarioID uint, usuario models.Usuario)(models.Usuario, error){
 	statement := repositorio.db.Model(&usuario).Where("ID = ?", usuarioID).Updates(models.Usuario{Nome: usuario.Nome, Nick: usuario.Nick, Email: usuario.Email})
 	if erro := statement.Error; erro != nil{
-		log.Fatal((erro))
+		return usuario, erro
 	}
 
 	return usuario, nil
 	
+}
+
+func (repositorio Usuarios) Deletar(ID uint64) error{
+	var usuario models.Usuario
+	statement := repositorio.db.Delete(&usuario, ID)
+	if erro := statement.Error; erro != nil  {
+		return erro
+	}
+
+	return nil
 }
