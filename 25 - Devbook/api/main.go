@@ -1,8 +1,8 @@
 package main
 
 import (
-	"api/src/banco"
 	"api/src/config"
+	"api/src/migration"
 	"api/src/router"
 	"fmt"
 	"log"
@@ -11,9 +11,7 @@ import (
 
 func main(){
 	config.Carregar()
-	banco.Conectar()
-
-	
+	migration.Migrate()
 	r := router.Gerar()
 
 

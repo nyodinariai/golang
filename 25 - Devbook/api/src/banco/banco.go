@@ -2,7 +2,6 @@ package banco
 
 import (
 	"api/src/config"
-	"api/src/models"
 	"fmt"
 	"log"
 
@@ -17,8 +16,6 @@ func Conectar()(*gorm.DB, error){
 		log.Fatalln(err)
 		return nil, err
 	}
-
-	db.AutoMigrate(&models.Usuario{})
 
 	fmt.Println("Conexão Realizada com sucesso")
 

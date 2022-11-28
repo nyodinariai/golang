@@ -5,6 +5,7 @@ import (
 	"api/src/models"
 	"api/src/repository"
 	"api/src/responses"
+	"api/src/services"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -33,14 +34,7 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	db, erro := banco.Conectar()
-	if erro != nil {
-		responses.Erro(w, http.StatusInternalServerError, erro)
-		return 
-	}
-
-	repositorio := repository.NovoRepositorioDeUsuarios(db)
-	usuario.ID, erro = repositorio.Criar(usuario)
+	usuario.ID, erro = services.CadastrarUsuario(&usuario)
 	if erro != nil{
 		responses.Erro(w, http.StatusInternalServerError, erro)
 		return
@@ -146,10 +140,11 @@ func DeletarUsuario(w http.ResponseWriter, r *http.Request){
 	}
 	
 	repositorio := repository.NovoRepositorioDeUsuarios(db)
-	if erro = repositorio.Deletar(usuarioID); erro != nil{
+	if erro = repositorio.Deletar(uint(usuarioID)); erro != nil{
 		responses.Erro(w, http.StatusInternalServerError, erro)
 		return
 	}
+
 
 	responses.JSON(w, http.StatusAccepted, nil)
 }

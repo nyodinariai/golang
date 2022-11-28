@@ -17,7 +17,7 @@ func NovoRepositorioDeUsuarios(db *gorm.DB) *Usuarios{
 	return &Usuarios{db}
 }
 
-func (repositorio Usuarios) Criar(usuario models.Usuario) (uint, error){
+func (repositorio Usuarios) Criar(usuario *models.Usuario) (uint, error){
 	
 	statement := repositorio.db.Create(&usuario)
 	if erro := statement.Error; erro != nil{
@@ -61,7 +61,7 @@ func (repositorio Usuarios) AtualizarUsuario(usuarioID uint, usuario models.Usua
 	
 }
 
-func (repositorio Usuarios) Deletar(ID uint64) error{
+func (repositorio Usuarios) Deletar(ID uint) error{
 	var usuario models.Usuario
 	statement := repositorio.db.Delete(&usuario, ID)
 	if erro := statement.Error; erro != nil  {
