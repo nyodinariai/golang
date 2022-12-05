@@ -22,3 +22,18 @@ func CadastrarUsuario(usuario *models.Usuario) (uint, error){
 
 	return usuarioCadastrado, nil
 }
+
+func BuscarPorEmail(email string) (models.Usuario, error){
+		db, erro := banco.Conectar()
+		if erro != nil {
+		return models.Usuario{}, erro
+		}
+
+		repositorio := repository.NovoRepositorioDeUsuarios(db)
+		usuario, erro := repositorio.BuscarPorEmail(email)
+		if erro != nil{
+		return usuario, erro
+		}
+
+		return usuario, nil
+}

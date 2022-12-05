@@ -15,6 +15,8 @@ var (
 	
 	//Porta do Servidor
 	Porta = 0
+
+	Secret_key []byte
 )
 
 // Inicializa as variáveis de ambiente
@@ -36,5 +38,7 @@ func Carregar(){
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_PORT"),
 		os.Getenv("DB_NAME"),
-	)	
+	)
+
+	Secret_key = []byte(os.Getenv("SECRET_KEY"))
 }

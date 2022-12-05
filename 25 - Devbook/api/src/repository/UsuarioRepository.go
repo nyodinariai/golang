@@ -19,8 +19,7 @@ func NovoRepositorioDeUsuarios(db *gorm.DB) *Usuarios{
 
 func (repositorio Usuarios) Criar(usuario *models.Usuario) (uint, error){
 	
-	statement := repositorio.db.Create(&usuario)
-	if erro := statement.Error; erro != nil{
+	if erro := repositorio.db.Create(&usuario).Error; erro != nil{
 		return 0, erro
 	}
 
@@ -69,4 +68,15 @@ func (repositorio Usuarios) Deletar(ID uint) error{
 	}
 
 	return nil
+}
+
+//Busca um usuario por e-mail e retorna um usuario por email, id e senha
+func (repositorio Usuarios) BuscarPorEmail(email string) (models.Usuario, error) {
+	var usuario models.Usuario
+	statement := repositorio.db.Model(&models.Usuario{}).Where("email = ?", email).Find(&usuario)
+	if erro := statement.Error; erro != nil{
+		return usuario, erro
+	}
+
+	return usuario, nil
 }

@@ -1,12 +1,14 @@
 package controllers
 
 import (
+	"api/src/auth"
 	"api/src/banco"
 	"api/src/models"
 	"api/src/repository"
 	"api/src/responses"
 	"api/src/services"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -96,6 +98,15 @@ func AtualizarUsuario(w http.ResponseWriter, r *http.Request){
 		responses.Erro(w, http.StatusBadRequest, erro)
 		return
 	}
+
+	usuarioIDToken, erro := auth.ExtrairUsuarioId(r)
+	if erro != nil{
+		responses.Erro(w, http.StatusUnauthorized, erro)
+		return
+	}
+
+	fmt.Println(usuarioIDToken)
+
 	corpoRequest, erro := ioutil.ReadAll(r.Body)
 	if erro != nil {
 		responses.Erro(w, http.StatusUnprocessableEntity, erro)
