@@ -8,7 +8,7 @@ import (
 	"api/src/responses"
 	"api/src/services"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -105,7 +105,10 @@ func AtualizarUsuario(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	fmt.Println(usuarioIDToken)
+	if usuarioID != uint64(usuarioIDToken){
+		responses.Erro(w, http.StatusForbidden, errors.New("não é possível atualizar um usuario que não seja o seu"))
+		return
+	}
 
 	corpoRequest, erro := ioutil.ReadAll(r.Body)
 	if erro != nil {
